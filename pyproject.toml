@@ -5,7 +5,10 @@ description = "Add your description here"
 authors = [
     { name = "shisotem", email = "129283841+shisotem@users.noreply.github.com" }
 ]
-dependencies = []
+dependencies = [
+    "numpy>=2.0.0",
+    "matplotlib>=3.9.1",
+]
 readme = "README.md"
 requires-python = ">= 3.12"
 
