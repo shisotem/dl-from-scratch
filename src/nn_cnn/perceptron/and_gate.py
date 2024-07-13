@@ -13,7 +13,7 @@ import numpy as np
 def AND(x1, x2):
     x = np.array([x1, x2])
     w = np.array([0.5, 0.5])
-    b = -0.7  # thetaを左辺に移項、-thetaをbと置く (バイアスは発火のしやすさを制御する)
+    b = -0.7  # thetaを左辺に移項、-thetaをbと置く (バイアスは発火のしやすさを制御する, パイアス=下駄はき)
     tmp = np.sum(w * x) + b
     return 0 if tmp <= 0 else 1
 
