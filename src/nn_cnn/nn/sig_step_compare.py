@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 # 共通点
 # 入力信号が重要な情報であれば大きな値を出力し、入力信号が重要でなければ小さな値を出力する
 # 非常に小さい/大きい入力信号がきても、出力信号の値を0から1の間に押し込める
+# ともに非線形関数
 
 
 def step_function(x: np.ndarray) -> np.ndarray:
