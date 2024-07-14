@@ -2,6 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+# 相違点
+# パーセプトロンではニューロン間を 0 か 1 の二値信号が流れていたのに対し、NNでは連続的な実数値の信号が流れる
+
+# 共通点
+# 入力信号が重要な情報であれば大きな値を出力し、入力信号が重要でなければ小さな値を出力する
+# 非常に小さい/大きい入力信号がきても、出力信号の値を0から1の間に押し込める
+
+
 def step_function(x: np.ndarray) -> np.ndarray:
     return np.array(x > 0, dtype=int)
 
