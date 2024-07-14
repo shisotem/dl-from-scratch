@@ -17,4 +17,8 @@ if __name__ == "__main__":
     x = np.array([1010, 1000, 990])  # 通常の実装ではoverflowしてしまう (exp(x)->inf)
     y = softmax(x)
     print(y)
-    print(np.sum(y))
+    print(np.sum(y))  # 1.0
+
+# logitとactivationの大小関係はsoftmax前後で不変
+# -> 分類タスク(推論時)では出力層のsoftmaxを省略するのが一般的
+# -> softmaxを使用するのは分類タスク(学習時)
