@@ -14,7 +14,7 @@ def softmax(x: np.ndarray) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    x = np.array([1010, 1000, 990])  # 通常の実装ではoverflowしてしまう
+    x = np.array([1010, 1000, 990])  # 通常の実装ではoverflowしてしまう (exp(x)->inf)
     y = softmax(x)
     print(y)
     print(np.sum(y))
