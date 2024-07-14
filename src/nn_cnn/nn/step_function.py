@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def step_function(x: np.ndarray):
+def step_function(x: np.ndarray) -> np.ndarray:
     return np.array(x > 0, dtype=int)
 
 
