@@ -1,10 +1,10 @@
 import os
 import sys
+import numpy as np
+from PIL import Image
 
 sys.path.append(os.pardir)
-import numpy as np
 from dataset.mnist import load_mnist
-from PIL import Image
 
 
 def img_show(img):
