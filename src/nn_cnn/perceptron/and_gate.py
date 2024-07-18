@@ -9,9 +9,10 @@
 #     return 0 if tmp <= theta else 1
 
 import numpy as np
+from typing import Literal
 
 
-def AND(x1, x2):
+def AND(x1: Literal[0, 1], x2: Literal[0, 1]) -> Literal[0, 1]:
     x = np.array([x1, x2])
     w = np.array([0.5, 0.5])
     b = -0.7  # thetaを左辺に移項、-thetaをbと置く (バイアスは発火のしやすさを制御する, パイアス=下駄はき)

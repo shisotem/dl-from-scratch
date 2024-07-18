@@ -1,7 +1,8 @@
 import numpy as np
+from typing import Literal
 
 
-def OR(x1, x2):
+def OR(x1: Literal[0, 1], x2: Literal[0, 1]) -> Literal[0, 1]:
     x = np.array([x1, x2])
     w = np.array([0.5, 0.5])
     b = -0.2
