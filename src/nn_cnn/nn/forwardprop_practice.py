@@ -42,7 +42,7 @@ def identity_function(x: np.ndarray) -> np.ndarray:
 # print(f"Y: {Y}")
 
 
-def init_network():
+def init_network() -> dict[str, np.ndarray]:
     network = {}
     network["W1"] = np.array([[0.1, 0.3, 0.5], [0.2, 0.4, 0.6]])
     network["b1"] = np.array([0.1, 0.2, 0.3])
@@ -53,7 +53,7 @@ def init_network():
     return network
 
 
-def forward(network, x):
+def forward(network: dict[str, np.ndarray], x: np.ndarray) -> np.ndarray:
     W1, W2, W3 = network["W1"], network["W2"], network["W3"]
     b1, b2, b3 = network["b1"], network["b2"], network["b3"]
 
