@@ -7,7 +7,6 @@ import gzip
 import pickle
 import os
 import numpy as np
-from typing import Dict
 
 
 # url_base = 'http://yann.lecun.com/exdb/mnist/'
@@ -31,7 +30,7 @@ img_size = 784
 
 
 # gzファイルをDL
-def _download(file_name):
+def _download(file_name: str) -> None:
     file_path = dataset_dir + "/" + file_name
 
     if os.path.exists(file_path):
@@ -49,13 +48,13 @@ def _download(file_name):
     print("Done")
 
 
-def download_mnist():
+def download_mnist() -> None:
     for v in key_file.values():
         _download(v)
 
 
 # ローカルにDL済みのgzファイルをloadし、ndarrayで返す
-def _load_label(file_name):
+def _load_label(file_name: str) -> np.ndarray:
     file_path = dataset_dir + "/" + file_name
 
     print("Converting " + file_name + " to NumPy Array ...")
@@ -69,7 +68,7 @@ def _load_label(file_name):
 
 
 # ローカルにDL済みのgzファイルをloadし、ndarrayで返す
-def _load_img(file_name):
+def _load_img(file_name: str) -> np.ndarray:
     file_path = dataset_dir + "/" + file_name
 
     print("Converting " + file_name + " to NumPy Array ...")
@@ -81,7 +80,7 @@ def _load_img(file_name):
     return data
 
 
-def _convert_numpy() -> Dict[str, np.ndarray]:
+def _convert_numpy() -> dict[str, np.ndarray]:
     dataset = {}
     dataset["train_img"] = _load_img(key_file["train_img"])
     dataset["train_label"] = _load_label(key_file["train_label"])
@@ -91,7 +90,7 @@ def _convert_numpy() -> Dict[str, np.ndarray]:
     return dataset
 
 
-def init_mnist():
+def init_mnist() -> None:
     download_mnist()
     dataset = _convert_numpy()
     print("Creating pickle file ...")
@@ -102,7 +101,7 @@ def init_mnist():
     print("Done!")
 
 
-def _change_one_hot_label(X):
+def _change_one_hot_label(X: np.ndarray) -> np.ndarray:
     T = np.zeros((X.size, 10))
     for idx, row in enumerate(T):
         row[X[idx]] = 1
@@ -110,7 +109,9 @@ def _change_one_hot_label(X):
     return T
 
 
-def load_mnist(normalize=True, flatten=True, one_hot_label=False):
+def load_mnist(
+    normalize: bool = True, flatten: bool = True, one_hot_label: bool = False
+) -> tuple[tuple[np.ndarray, np.ndarray], tuple[np.ndarray, np.ndarray]]:
     """MNISTデータセットの読み込み
 
     Parameters
@@ -130,7 +131,7 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
 
     # 以降、mnist.pklを解凍してoptionの変換を施した後のndarrayを返す処理
     with open(save_file, "rb") as f:
-        dataset = pickle.load(f)
+        dataset: dict[str, np.ndarray] = pickle.load(f)
 
     if normalize:
         for key in ("train_img", "test_img"):
