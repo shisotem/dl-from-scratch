@@ -7,11 +7,13 @@ import gzip
 import pickle
 import os
 import numpy as np
+from typing import Dict
 
 
 # url_base = 'http://yann.lecun.com/exdb/mnist/'
 url_base = "https://ossci-datasets.s3.amazonaws.com/mnist/"  # mirror site
 
+# ファイル名のショートカットとフルのファイル名のマップ
 key_file = {
     "train_img": "train-images-idx3-ubyte.gz",
     "train_label": "train-labels-idx1-ubyte.gz",
@@ -19,7 +21,7 @@ key_file = {
     "test_label": "t10k-labels-idx1-ubyte.gz",
 }
 
-dataset_dir = os.path.dirname(os.path.abspath(__file__))
+dataset_dir = os.path.dirname(os.path.abspath(__file__))  # datasetディレクトリ
 save_file = dataset_dir + "/mnist.pkl"
 
 train_num = 60000
@@ -28,6 +30,7 @@ img_dim = (1, 28, 28)
 img_size = 784
 
 
+# gzファイルをDL
 def _download(file_name):
     file_path = dataset_dir + "/" + file_name
 
@@ -35,6 +38,7 @@ def _download(file_name):
         return
 
     print("Downloading " + file_name + " ... ")
+    # User-Agent: ウェブサーバに対して、リクエストを行っているクライアントソフトウェアの種類、バージョン、OSなどの情報を伝えるテキスト文字列
     headers = {
         "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:47.0) Gecko/20100101 Firefox/47.0"
     }
@@ -50,17 +54,21 @@ def download_mnist():
         _download(v)
 
 
+# ローカルにDL済みのgzファイルをloadし、ndarrayで返す
 def _load_label(file_name):
     file_path = dataset_dir + "/" + file_name
 
     print("Converting " + file_name + " to NumPy Array ...")
     with gzip.open(file_path, "rb") as f:
-        labels = np.frombuffer(f.read(), np.uint8, offset=8)
+        labels = np.frombuffer(
+            f.read(), np.uint8, offset=8
+        )  # offset: ファイルヘッダをskip
     print("Done")
 
     return labels
 
 
+# ローカルにDL済みのgzファイルをloadし、ndarrayで返す
 def _load_img(file_name):
     file_path = dataset_dir + "/" + file_name
 
@@ -73,7 +81,7 @@ def _load_img(file_name):
     return data
 
 
-def _convert_numpy():
+def _convert_numpy() -> Dict[str, np.ndarray]:
     dataset = {}
     dataset["train_img"] = _load_img(key_file["train_img"])
     dataset["train_label"] = _load_label(key_file["train_label"])
@@ -88,6 +96,8 @@ def init_mnist():
     dataset = _convert_numpy()
     print("Creating pickle file ...")
     with open(save_file, "wb") as f:
+        # -1: 利用可能な最高の(シリアライゼーションの)プロトコルバージョンを使用
+        # serialization: オブジェクトやデータ構造を、保存や転送が可能な形式(通常はバイト列)に変換するプロセス
         pickle.dump(dataset, f, -1)
     print("Done!")
 
@@ -116,8 +126,9 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
     (訓練画像, 訓練ラベル), (テスト画像, テストラベル)
     """
     if not os.path.exists(save_file):
-        init_mnist()
+        init_mnist()  # DLしてmnist.pklを作成
 
+    # 以降、mnist.pklを解凍してoptionの変換を施した後のndarrayを返す処理
     with open(save_file, "rb") as f:
         dataset = pickle.load(f)
 
@@ -132,6 +143,9 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
 
     if not flatten:
         for key in ("train_img", "test_img"):
+            # 多くのフレームワークのCNNは4階テンソルを入力として期待
+            # チャネル数(=1)を明示
+            # バッチサイズを柔軟にする
             dataset[key] = dataset[key].reshape(-1, 1, 28, 28)
 
     return (dataset["train_img"], dataset["train_label"]), (
@@ -141,4 +155,4 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
 
 
 if __name__ == "__main__":
-    init_mnist()
+    init_mnist()  # DLしてmnist.pklを作成
