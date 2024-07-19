@@ -3,8 +3,19 @@ import sys
 import numpy as np
 from PIL import Image
 
-sys.path.append(os.pardir)
-from dataset.mnist import load_mnist
+# MNISTデータセットのモジュールがあるディレクトリへのパスを追加
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+try:
+    from dataset.mnist import load_mnist
+except ImportError:
+    print("Error: Could not import 'load_mnist' from 'dataset.mnist'.")
+    print(
+        "Please ensure that the 'dataset' directory is in the parent directory of this script."
+    )
+    sys.exit(1)
 
 
 def img_show(img: np.ndarray) -> None:
